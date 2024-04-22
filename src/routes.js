@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const { login, createTask } = require("./handler");
+const { login, createTask, getTasks } = require("./handler");
 
 router.post('/login', login)
-router.post('/createTask', createTask)
+router.post('/create-task', createTask)
+router.get('/get-task', getTasks)
 
 
 module.exports = router

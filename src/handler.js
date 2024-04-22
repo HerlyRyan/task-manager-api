@@ -76,7 +76,34 @@ const createTask = async (req, res) => {
     }
 };
 
+const getTasks = async (req, res) => {
+    try {
+        const userId = req.user && req.user.userId;
+
+        if (!userId) {
+            res.status(401).json({ error: "Unauthorized" });
+            return;
+        }
+
+        // Retrieve tasks from the database
+        const query = "SELECT * FROM tasks WHERE user_id = ?";
+        db.query(query, [userId], (err, result) => {
+            if (err) {
+                console.error("Error executing query:", err);
+                res.status(500).json({ error: "Internal Server Error" });
+                return;
+            }
+
+            res.status(200).json({ tasks: result });
+        });
+    } catch (error) {
+        console.error("Error getting tasks:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
 module.exports = {
     login,
-    createTask
+    createTask,
+    getTasks
 };
